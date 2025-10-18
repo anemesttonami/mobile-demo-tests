@@ -4,6 +4,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.appium.java_client.AppiumBy;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -22,13 +23,20 @@ public class WikiAndroidTests extends BaseTest {
 
     private final SelenideElement search = $(id("org.wikipedia.alpha:id/search_container")),
             searchInput = $(id("org.wikipedia.alpha:id/search_src_text")),
-            resultPageHeaderImg = $(id("org.wikipedia.alpha:id/view_page_header_image"));
+            resultPageHeaderImg = $(id("org.wikipedia.alpha:id/view_page_header_image")),
+            exploreTab = $(accessibilityId("Explore")),
+            savedTab = $(accessibilityId("Saved")),
+            searchTab = $(accessibilityId("Search")),
+            editsTab = $(accessibilityId("Edits")),
+            moreTab = $(accessibilityId("More"));
+
 
     private final ElementsCollection searchResults = $$(id("org.wikipedia.alpha:id/page_list_item_title"));
     private final String textForSearch = "Sagrada Família";
 
     @Test
     @Tag("regress")
+    @DisplayName("Все элементы поиска на странице \"Explore\" присутствуют.")
     void isSearchClickableAndHisElementsVisible() {
         step("Поиск видно и он кликабелен.", () -> search.shouldBe(visible).shouldHave(attribute("clickable", "true")));
         step("Кнопка поиска видна.", () -> $(accessibilityId("Search Wikipedia")).should(visible));
@@ -40,6 +48,7 @@ public class WikiAndroidTests extends BaseTest {
 
     @Test
     @Tag("smoke")
+    @DisplayName("Выполнение поиска со страницы \"Explore\" и переход на страницу результата поиска.")
     void canSearchSmth() {
         step("Вводим текст в поиск.", () -> {
             search.click();
@@ -54,5 +63,16 @@ public class WikiAndroidTests extends BaseTest {
                 () -> searchResults.first().shouldHave(attribute("text", textForSearch)));
         step("Переходим на страницу первого из результатов.", () -> searchResults.first().click());
         step("Проверяем, что переход успешен", () -> resultPageHeaderImg.shouldBe(visible));
+    }
+
+    @Test
+    @Tag("smoke")
+    @DisplayName("Отображение вкладок на tab bar.")
+    void areTabBarElementsVisible() {
+        step("Вкладка \"Explore\" видна.", () -> exploreTab.shouldBe(visible));
+        step("Вкладка \"Saved\" видна.", () -> savedTab.shouldBe(visible));
+        step("Вкладка \"Search\" видна.", () -> searchTab.shouldBe(visible));
+        step("Вкладка \"Edits\" видна.", () -> editsTab.shouldBe(visible));
+        step("Вкладка \"More\" видна.", () -> moreTab.shouldBe(visible));
     }
 }
