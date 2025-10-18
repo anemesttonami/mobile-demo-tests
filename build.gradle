@@ -54,11 +54,26 @@ tasks.withType(Test) {
     }
 }
 
-tasks.register('android_emulator_task', Test) {
-    //TODO:потом убери это
-    systemProperty("os","android")
-    systemProperty("env","emulator")
+def android = "android",
+    wiki = "wiki",
+    regress = "regress",
+    smoke = "smoke"
+
+tasks.register('android_wiki_regress_task', Test) {
     useJUnitPlatform {
-        includeTags("regress")
+        includeTags(android, wiki, regress)
+        excludeTags(smoke)
+    }
+}
+
+tasks.register('android_wiki_smoke_task', Test) {
+    useJUnitPlatform {
+        includeTags(android, wiki, smoke)
+    }
+}
+
+tasks.register('android_wiki_smoke_and_regress_task', Test) {
+    useJUnitPlatform {
+        includeTags(android, wiki, smoke,regress)
     }
 }

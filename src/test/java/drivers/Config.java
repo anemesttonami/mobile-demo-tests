@@ -10,7 +10,7 @@ public interface Config extends org.aeonbits.owner.Config {
     @DefaultValue("11.0")
     String osVersion();
 
-    @DefaultValue("emulator")
+    @DefaultValue("LOCAL_ANDROID_EMULATOR")
     String env();
 
     @DefaultValue("Pixel_4")
