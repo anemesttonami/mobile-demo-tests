@@ -1,19 +1,15 @@
 package tests.android;
 
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
+import helpers.WikiAppHelper;
 import io.appium.java_client.AppiumBy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static io.appium.java_client.AppiumBy.accessibilityId;
-import static io.appium.java_client.AppiumBy.id;
 import static io.qameta.allure.Allure.step;
 
 
@@ -21,24 +17,14 @@ import static io.qameta.allure.Allure.step;
 @Tag("wiki")
 public class WikiAndroidTests extends BaseTest {
 
-    private final SelenideElement search = $(id("org.wikipedia.alpha:id/search_container")),
-            searchInput = $(id("org.wikipedia.alpha:id/search_src_text")),
-            resultPageHeaderImg = $(id("org.wikipedia.alpha:id/view_page_header_image")),
-            exploreTab = $(accessibilityId("Explore")),
-            savedTab = $(accessibilityId("Saved")),
-            searchTab = $(accessibilityId("Search")),
-            editsTab = $(accessibilityId("Edits")),
-            moreTab = $(accessibilityId("More"));
-
-
-    private final ElementsCollection searchResults = $$(id("org.wikipedia.alpha:id/page_list_item_title"));
-    private final String textForSearch = "Sagrada Família";
+    private final WikiAppHelper helper = new WikiAppHelper();
 
     @Test
     @Tag("regress")
     @DisplayName("Все элементы поиска на странице \"Explore\" присутствуют.")
     void isSearchClickableAndHisElementsVisible() {
-        step("Поиск видно и он кликабелен.", () -> search.shouldBe(visible).shouldHave(attribute("clickable", "true")));
+        step("Поиск видно.", () -> helper.getSearch().shouldBe(visible));
+        step("Поиск кликабелен.", () -> helper.getSearch().shouldHave(attribute("clickable", "true")));
         step("Кнопка поиска видна.", () -> $(accessibilityId("Search Wikipedia")).should(visible));
         step("Плейсхолдер \"Search Wikipedia\" видно.", () ->
                 $(AppiumBy.androidUIAutomator("new UiSelector().text(\"Search Wikipedia\")")).shouldBe(visible));
@@ -51,28 +37,41 @@ public class WikiAndroidTests extends BaseTest {
     @DisplayName("Выполнение поиска со страницы \"Explore\" и переход на страницу результата поиска.")
     void canSearchSmth() {
         step("Вводим текст в поиск.", () -> {
-            search.click();
-            searchInput.sendKeys(textForSearch);
+            helper.getSearch().click();
+            helper.getSearchInput().sendKeys(helper.getTextForSearch());
         });
-        step("Введённый текст отображается в строке поиска.", () -> searchInput.shouldBe(visible));
+        step("Введённый текст отображается в строке поиска.", () -> helper.getSearchInput().shouldBe(visible));
         step("Отобразились какие-то результаты поиска.", () -> {
-            searchResults.first().shouldBe(visible);
-            Assertions.assertFalse(searchResults.isEmpty());
+            helper.getSearchResults().first().shouldBe(visible);
+            Assertions.assertFalse(helper.getSearchResults().isEmpty());
         });
         step("Проверяем, что у первого найденного элемента содержится запрашиваемый текст.",
-                () -> searchResults.first().shouldHave(attribute("text", textForSearch)));
-        step("Переходим на страницу первого из результатов.", () -> searchResults.first().click());
-        step("Проверяем, что переход успешен", () -> resultPageHeaderImg.shouldBe(visible));
+                () -> helper.getSearchResults().first().shouldHave(attribute("text", helper.getTextForSearch())));
+        step("Переходим на страницу первого из результатов.", () -> helper.getSearchResults().first().click());
+
+        helper.closeWikiGamesPopup();
+
+        step("Проверяем, что переход успешен", () -> helper.getResultPageHeaderImg().shouldBe(visible));
     }
 
     @Test
     @Tag("smoke")
     @DisplayName("Отображение вкладок на tab bar.")
     void areTabBarElementsVisible() {
-        step("Вкладка \"Explore\" видна.", () -> exploreTab.shouldBe(visible));
-        step("Вкладка \"Saved\" видна.", () -> savedTab.shouldBe(visible));
-        step("Вкладка \"Search\" видна.", () -> searchTab.shouldBe(visible));
-        step("Вкладка \"Edits\" видна.", () -> editsTab.shouldBe(visible));
-        step("Вкладка \"More\" видна.", () -> moreTab.shouldBe(visible));
+        step("Вкладки на tab bar видны и кликабельны, кроме \"Explore\", \"Explore\" не кликабелен, потому что выбран.", () -> {
+            step("\"Explore\"", () -> helper.getExploreTab().shouldBe(visible).shouldHave(attribute("clickable", "false")));
+            step("\"Saved\"", () -> helper.getSavedTab().shouldBe(visible).shouldHave(attribute("clickable", "true")));
+            step("\"Search\"", () -> helper.getSearchTab().shouldBe(visible).shouldHave(attribute("clickable", "true")));
+            step("\"Activity\" или \"Edits\". " +
+                    "\"Activity\", когда поиска еще ни разу не было." +
+                    "\"Edits\" появляется вместо \"Activity\", когда поиска уже совершался ранее в приложении.", () -> {
+                boolean isActivityOrEditsVisibleAndClickable =
+                        (helper.getActivityTab().is(visible) && helper.getActivityTab().is(have(attribute("clickable", "true"))))
+                                || (helper.getEditsTab().is(visible) && helper.getEditsTab().is(have(attribute("clickable", "true"))));
+
+                Assertions.assertTrue(isActivityOrEditsVisibleAndClickable, "Ни \"Activity\", ни \"Edits\" не видны и кликабельны одновременно.");
+            });
+            step("\"More\"", () -> helper.getMoreTab().shouldBe(visible).shouldHave(attribute("clickable", "true")));
+        });
     }
 }

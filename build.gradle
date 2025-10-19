@@ -39,6 +39,8 @@ dependencies {
             "org.slf4j:slf4j-simple:$slf4jVersion",
             'org.aeonbits.owner:owner:1.0.4'
     )
+    testCompileOnly('org.projectlombok:lombok:1.18.38')
+    testAnnotationProcessor('org.projectlombok:lombok:1.18.38')
 }
 
 tasks.withType(Test) {
@@ -59,21 +61,54 @@ def android = "android",
     regress = "regress",
     smoke = "smoke"
 
-tasks.register('android_wiki_regress_task', Test) {
+
+static def setupBrowserstack(task) {
+    task.systemProperty "os", "android"
+    task.systemProperty "env", "browserstack"
+}
+
+def browserstackTasks = ['smoke_browserStack_android_wiki_task',
+                         'regress_browserStack_android_wiki_task',
+                         'smoke_and_regress_browserStack_android_wiki_task']
+
+tasks.matching { t -> browserstackTasks.contains(t.name) }.configureEach { task ->
+    setupBrowserstack(task)
+}
+
+tasks.register('regress_emulator_android_wiki_task', Test) {
     useJUnitPlatform {
         includeTags(android, wiki, regress)
         excludeTags(smoke)
     }
 }
 
-tasks.register('android_wiki_smoke_task', Test) {
+tasks.register('smoke_emulator_android_wiki_task', Test) {
     useJUnitPlatform {
         includeTags(android, wiki, smoke)
     }
 }
 
-tasks.register('android_wiki_smoke_and_regress_task', Test) {
+tasks.register('all_emulator_android_wiki_task', Test) {
     useJUnitPlatform {
-        includeTags(android, wiki, smoke,regress)
+        includeTags(android, wiki, smoke, regress)
+    }
+}
+
+tasks.register('regress_browserStack_android_wiki_task', Test) {
+    useJUnitPlatform {
+        includeTags(android, wiki, regress)
+        excludeTags(smoke)
+    }
+}
+
+tasks.register('smoke_browserStack_android_wiki_task', Test) {
+    useJUnitPlatform {
+        includeTags(android, wiki, smoke)
+    }
+}
+
+tasks.register('smoke_and_regress_browserStack_android_wiki_task', Test) {
+    useJUnitPlatform {
+        includeTags(android, wiki, smoke, regress)
     }
 }

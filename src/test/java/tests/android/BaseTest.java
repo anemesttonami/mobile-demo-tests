@@ -14,44 +14,46 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.io.IOException;
-
 import static com.codeborne.selenide.Selenide.closeWebDriver;
 import static com.codeborne.selenide.Selenide.open;
+import static enums.Env.getCurrentEnv;
+import static helpers.BrowserStack.skipOnboardingScreen;
 
 public class BaseTest {
 
     private static final Config CONFIG = ConfigFactory.create(Config.class, System.getProperties());
-    private static final Env ENV = Env.valueOf(CONFIG.env());
+    private static final Env ENV = getCurrentEnv(CONFIG);
 
     @BeforeAll
-    static void beforeAll() throws IOException, InterruptedException {
+    static void beforeAll() {
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
         Configuration.browserSize = null;
-        Configuration.timeout = 30000;
+        Configuration.timeout = 15000;
 
         switch (ENV) {
             case LOCAL_ANDROID_EMULATOR -> Configuration.browser = AndroidDriverProvider.class.getName();
-            case BROWSER_STACK -> Configuration.browser = BrowserStackDriverProvider.class.getName();
+            case BROWSER_STACK -> {
+                Configuration.screenshots = false;
+                Configuration.browser = BrowserStackDriverProvider.class.getName();
+            }
         }
     }
 
     @BeforeEach
     void beforeEach() {
         open();
+        skipOnboardingScreen();
     }
 
     @AfterEach
     void afterEach() {
         switch (ENV) {
-            case LOCAL_ANDROID_EMULATOR -> Configuration.browser = AndroidDriverProvider.class.getName();
+            case LOCAL_ANDROID_EMULATOR -> Attach.screenshotAs("Screenshot before closing driver.");
             case BROWSER_STACK -> {
-                Configuration.browser = BrowserStackDriverProvider.class.getName();
                 String sessionId = Selenide.sessionId().toString();
-                Attach.addVideo(sessionId);
+                Attach.addVideo(sessionId, CONFIG);
             }
         }
-        Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
         closeWebDriver();
     }

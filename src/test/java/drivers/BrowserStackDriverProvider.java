@@ -28,8 +28,8 @@ public class BrowserStackDriverProvider implements WebDriverProvider {
         caps.setCapability("device", config.device());
         caps.setCapability("os_version", config.osVersion());
         caps.setCapability("project", config.browserstackProjectName());
-        caps.setCapability("build", "build from : " + LocalDate.now());
-        caps.setCapability("name", "test from : " + LocalDateTime.now());
+        caps.setCapability("build", "build from " + LocalDate.now().toString());
+        caps.setCapability("name", "test from " + LocalDateTime.now().toString());
 
         try {
             return new RemoteWebDriver(new URL(config.browserstackUrl()), caps);
