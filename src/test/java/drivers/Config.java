@@ -7,7 +7,6 @@ public interface Config extends org.aeonbits.owner.Config {
     String os();
 
     @DefaultValue("11.0")
-    @Key("osVersion")
     String osVersion();
 
     @DefaultValue("emulator")

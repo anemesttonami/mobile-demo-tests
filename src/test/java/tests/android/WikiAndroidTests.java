@@ -12,7 +12,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static io.appium.java_client.AppiumBy.accessibilityId;
 import static io.qameta.allure.Allure.step;
 
-
 @Tag("android")
 @Tag("wiki")
 public class WikiAndroidTests extends BaseTest {
