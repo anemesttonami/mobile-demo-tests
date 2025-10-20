@@ -33,7 +33,9 @@
     <td align="center"><img width="50" src="images/java-logo.svg"><br>Java</td>
     <td align="center"><img width="50" src="images/git-logo.svg"><br>GitHub</td>
     <td align="center"><img width="50" src="images/gradle-logo.svg"><br>Gradle</td>
-    <td align="center"><img width="50" src="images/selenoid-logo.svg"><br>Selenoid</td>
+    <td align="center"><img width="50" src="images/android.svg"><br>Android</td>
+    <td align="center"><img width="50" src="images/appium.svg"><br>Appium</td>
+    <td align="center"><img width="50" src="images/browserstack.svg"><br>Browserstack</td>
     <td align="center"><img width="50" src="images/selenide-logo.svg"><br>Selenide</td>
     <td align="center"><img width="50" src="images/IDEA-logo.svg"><br>IntelliJ IDEA</td>
     <td align="center"><img width="50" src="images/junit5-logo.svg"><br>JUnit5</td>
