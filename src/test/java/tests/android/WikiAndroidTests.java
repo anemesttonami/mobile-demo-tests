@@ -2,6 +2,7 @@ package tests.android;
 
 import helpers.WikiAppHelper;
 import io.appium.java_client.AppiumBy;
+import io.qameta.allure.Epic;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -14,6 +15,7 @@ import static io.qameta.allure.Allure.step;
 
 @Tag("android")
 @Tag("wiki")
+@Epic("Мобильные тесты на android приложение \"Wikipedia\"")
 public class WikiAndroidTests extends BaseTest {
 
     private final WikiAppHelper helper = new WikiAppHelper();

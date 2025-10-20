@@ -69,7 +69,7 @@ static def setupBrowserstack(task) {
 
 def browserstackTasks = ['smoke_browserStack_android_wiki_task',
                          'regress_browserStack_android_wiki_task',
-                         'smoke_and_regress_browserStack_android_wiki_task']
+                         'all_browserStack_android_wiki_task']
 
 tasks.matching { t -> browserstackTasks.contains(t.name) }.configureEach { task ->
     setupBrowserstack(task)
@@ -90,7 +90,7 @@ tasks.register('smoke_emulator_android_wiki_task', Test) {
 
 tasks.register('all_emulator_android_wiki_task', Test) {
     useJUnitPlatform {
-        includeTags(android, wiki, smoke, regress)
+        includeTags(android, wiki)
     }
 }
 
@@ -107,8 +107,8 @@ tasks.register('smoke_browserStack_android_wiki_task', Test) {
     }
 }
 
-tasks.register('smoke_and_regress_browserStack_android_wiki_task', Test) {
+tasks.register('all_browserStack_android_wiki_task', Test) {
     useJUnitPlatform {
-        includeTags(android, wiki, smoke, regress)
+        includeTags(android, wiki)
     }
 }

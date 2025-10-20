@@ -1,14 +1,9 @@
 <div align="center">
 
-# Проект UI автотестов для сайта RSTQB
+# Проект мобильных автотестов для приложения Wikipedia
 
-<img src="images/ISTQB.svg" width="350">
+<img src="images/wikipedia.svg" width="1000">
 </div>
-
-> **RSTQB** — это ISTQB в России.
->
-> **ISTQB** (International Software Testing Qualifications Board) — международная организация, занимающаяся разработкой
-> и утверждением стандартов в области тестирования программного обеспечения.
 
 ---
 
@@ -21,6 +16,7 @@
 - [📊 Allure](#allure)
 - [📊+🧪 Allure TestOps](#testops)
 - [🔔 Telegram](#telegram)
+- [🎥 Видеопример выполнения теста на Browserstack](#browserstack)
 
 ---
 
@@ -55,42 +51,86 @@
 
 ## 🧪 Тест-кейсы
 
-### Главная страница
-
-- ✅ Проверка видимости логотипа.
-- ✅ Кнопка "Поиск" перебрасывает на страницу "Расписание экзаменов".
-- ✅ Поиск по дате работает.
-
-### Страница "Материалы ISTQB®"
-
-- ✅ PDF скачивается, соответствующий текст в PDF присутствует.
-
-### Страница "Расписание экзаменов"
-
-- ✅ Поиск по комбинации фильтров "город" и "уровень" возможен.
-- ✅ Кнопка перехода на следущющую страницу.
-- ✅ Фильтр и его поля видны.
+- ✅ Выполнение поиска со страницы "Explore" и переход на страницу результата поиска.
+- ✅ Все элементы поиска на странице \"Explore\" присутствуют.
+- ✅ Отображение вкладок на tab bar.
 
 ___
 <a id="запуск-автотестов-через-терминал"></a>
 
-## 🚀 Запуск автотестов через терминал
+## 🚀 Запуск автотестов через терминал на локальном эмуляторе
 
-### Запустить все тесты локально
+### Предварительно требуется
 
+    1.Установить Android Studio
+    2.В Android Studio -> SDK Manager скачать android 11
+    3.В AVD Manager скачать образ Pixel 4 для 11 андроида 
+    4.Установить node.js
+    5.Установить Appium Server
+    6.Установить драйвер uiautomator2
+
+7. Запустить Appium Server
 ```bash
-  ./gradlew clean test
+   appium server --base-path /wd/hub
 ```
 
-Также есть возможность вместо **test** указать **smoke** или **regress** и запустятся соответствующие тесты 🤖
-
-### Запустить все тесты удалённо (на selenoid сервере)
-
+8. Запустить эмулятор Pixel 4
 ```bash
-  ./gradlew clean -DselenoidLogin={LOGIN} -DselenoidPass={PASS} test
+   ${absolute path to app mobile-demo-tests\src\test\resources\apps\wiki.apk} -avd Pixel_4 -no-snapshot-load
 ```
 
-Вместо {LOGIN} и {PASS} необходимо подставить креды от selenoid.
+9. Установить приложение на эмулятор (если еще не установлено)
+```bash
+   adb install ${absolute path to app mobile-demo-tests\src\test\resources\apps\wiki.apk}
+```
+
+10. Запустить приложение на эмуляторе
+```bash
+   adb shell am start -n org.wikipedia.alpha/org.wikipedia.main.MainActivity
+```
+
+### Запускаем тесты
+
+regress
+```bash
+   regress_emulator_android_wiki_task
+```
+smoke
+```bash
+   smoke_emulator_android_wiki_task
+```
+all
+```bash
+   all_emulator_android_wiki_task
+```
+
+
+---
+
+
+## Запуск автотестов с локальной машины на BrowserStack
+### Предварительно требуется
+
+1. Зарегистрироваться на BrowserStack
+2. Загрузить приложение на BrowserStack аккаунт (требуется только в первый раз)
+
+```powershell 
+curl.exe -u "${BrowserStackUser}:${BrowserStackKey}" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@${absolute path to app mobile-demo-tests\src\test\resources\apps\wiki.apk}" -F "custom_id=WikiApp" -k
+```
+3. Запустить одну из тасок 
+
+regress
+```bash
+./gradlew clean -Dbrowserstack.user=${BrowserStackUser} -Dbrowserstack.key=${BrowserStackKey} regress_browserStack_android_wiki_task
+```
+smoke
+```bash
+./gradlew clean -Dbrowserstack.user=${BrowserStackUser} -Dbrowserstack.key=${BrowserStackKey} smoke_browserStack_android_wiki_task
+```
+all
+```bash
+./gradlew clean -Dbrowserstack.user=${BrowserStackUser} -Dbrowserstack.key=${BrowserStackKey} all_browserStack_android_wiki_task
+```
 
 ### Получить Allure отчёт
 
@@ -111,13 +151,9 @@ Jenkins job-а для запуска автотестов этого проек�
 
 ### Параметры сборки в Jenkins:
 
-- SELENOID_LOGIN
-- SELENOID_PASS
+- BROWSER_STACK_USER
+- BROWSER_STACK_KEY
 - TESTS_TO_RUN
-- ENV
-- BROWSER_VERSION
-- BROWSER_SIZE
-- COMMENT
 
 <div align="center">
 
@@ -184,3 +220,11 @@ TMS <code>Allure TestOps</code>.
 <img src="images/tgAlerting.png" width="750">
 
 </div>
+
+--- 
+
+<a id="browserstack"></a>
+
+## <img width="35" style="vertical-align:middle" src="images/browserstack.svg"> </a> Видеопример выполнения теста на Browserstack
+
+Видео сохраняется для каждого теста в Allure отчёте
