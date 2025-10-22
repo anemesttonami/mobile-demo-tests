@@ -117,7 +117,9 @@ all
 ```powershell 
 curl.exe -u "${BrowserStackUser}:${BrowserStackKey}" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@${absolute path to app mobile-demo-tests\src\test\resources\apps\wiki.apk}" -F "custom_id=WikiApp" -k
 ```
-3. Запустить одну из тасок 
+заменить вернувшийся в ответе bs в файле [browserstack.properties](src/test/resources/android/browserstack.properties)
+
+### Запустить одну из тасок 
 
 regress
 ```bash
