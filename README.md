@@ -93,15 +93,15 @@ ___
 
 regress
 ```bash
-   regress_emulator_android_wiki_task
+  ./gradlew clean regress_emulator_android_wiki_task
 ```
 smoke
 ```bash
-   smoke_emulator_android_wiki_task
+  ./gradlew clean smoke_emulator_android_wiki_task
 ```
 all
 ```bash
-   all_emulator_android_wiki_task
+  ./gradlew clean all_emulator_android_wiki_task
 ```
 
 
@@ -144,7 +144,7 @@ ___
 
 <a id="сборка-jenkins"></a>
 
-## <img width="40" style="vertical-align:middle" src="images/jenkins.svg"> </a> Сборка в <a target="_blank" href="https://jenkins.autotests.cloud/"> Jenkins </a>
+## <img width="40" style="vertical-align:middle" src="images/jenkins.svg"> </a> Сборка в <a target="_blank" href="https://jenkins.autotests.cloud/job/C36-andreyalbaev-mobile-21/"> Jenkins </a>
 
 Jenkins job-а для запуска автотестов этого проекта
 располагается <a target="_blank" href="https://jenkins.autotests.cloud/job/C36-andreyalbaev-ui-21"> здесь</a>. Для
@@ -153,13 +153,16 @@ Jenkins job-а для запуска автотестов этого проек�
 
 ### Параметры сборки в Jenkins:
 
+- TASK
 - BROWSER_STACK_USER
 - BROWSER_STACK_KEY
-- TESTS_TO_RUN
+- OS
+- ENV
+- COMMENT
 
 <div align="center">
 
-<img src="images/JenParameters.png" width="1500">
+<img src="images/jenkinsParams.png" width="1500">
 
 </div>
 
@@ -174,22 +177,9 @@ TMS <code>Allure TestOps</code>.
 
 ### Пример отчёта
 
-<img src="images/allureReportExample.png" width="1500">
+<img src="images/allureReport.png" width="1500">
 
 Как уже было сказано ранее, отчёт формируется автоматически после прогона автотестов.
-
-### Allure attachments
-
-Также после выполнения тестов к отчёту добавляются:
-
-1) Скриншот окна перед закрытием драйвера
-2) Логи консоли браузера
-3) HTML страницы перед закрытием драйвера
-4) Видео выполнения автотеста
-
-На скриншоте ниже это видно в правой части экрана.
-
-<img src="images/allureAttach.png" width="1500">
 
 ---
 <a id="testops"></a>
@@ -200,11 +190,7 @@ TMS <code>Allure TestOps</code>.
 автоматически выгружаются результаты прохождения автотестов после выполнения job-ы в Jenkins.
 
 <div align="center">
-<img src="images/jenkinsAllure.jpg" width="750">
-
-</div>
-<div align="center">
-<img src="images/testOpsResults.jpg" width="750">
+<img src="images/testOpsExample.png" width="1500">
 
 </div>
 
@@ -214,12 +200,12 @@ TMS <code>Allure TestOps</code>.
 
 ## <img width="35" style="vertical-align:middle" src="images/telegram.svg"> </a>  Telegram уведомления
 
-К проекту также подключен бот , который по завершении прогона автотестов посылает краткую сводку и ссылку на allure
+К проекту также подключен бот, который по завершении прогона автотестов посылает краткую сводку и ссылку на allure
 отчёт в telegram<a target="_blank" href="https://t.me/esttonami"> чат</a>.
 
 
 <div align="center">
-<img src="images/tgAlerting.png" width="750">
+<img src="images/tg.png" width="400">
 
 </div>
 
@@ -229,4 +215,9 @@ TMS <code>Allure TestOps</code>.
 
 ## <img width="35" style="vertical-align:middle" src="images/browserstack.svg"> </a> Видеопример выполнения теста на Browserstack
 
-Видео сохраняется для каждого теста в Allure отчёте
+Видео сохраняется для каждого теста на browserstack в Allure отчёте
+
+
+<p align="center">
+<img title="Browserstack Video" src="images/a088fd25c8c852391bda3d6e5b43a814434dd488.gif" width="350" height="350"  alt="video">   
+</p>
