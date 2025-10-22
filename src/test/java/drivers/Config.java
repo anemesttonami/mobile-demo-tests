@@ -21,10 +21,10 @@ public interface Config extends org.aeonbits.owner.Config {
     @DefaultValue("Mobile Autotests")
     String browserstackProjectName();
 
-    @Key("browserstack.user")
+    @Key("browserstackUser")
     String browserstackLogin();
 
-    @Key("browserstack.key")
+    @Key("browserstackKey")
     String browserstackPass();
 
     @DefaultValue("https://hub.browserstack.com/wd/hub")
