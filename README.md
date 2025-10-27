@@ -70,21 +70,25 @@ ___
     6.Установить драйвер uiautomator2
 
 7. Запустить Appium Server
+
 ```bash
    appium server --base-path /wd/hub
 ```
 
 8. Запустить эмулятор Pixel 4
+
 ```bash
    ${absolute path to app mobile-demo-tests\src\test\resources\apps\wiki.apk} -avd Pixel_4 -no-snapshot-load
 ```
 
 9. Установить приложение на эмулятор (если еще не установлено)
+
 ```bash
    adb install ${absolute path to app mobile-demo-tests\src\test\resources\apps\wiki.apk}
 ```
 
 10. Запустить приложение на эмуляторе
+
 ```bash
    adb shell am start -n org.wikipedia.alpha/org.wikipedia.main.MainActivity
 ```
@@ -92,23 +96,27 @@ ___
 ### Запускаем тесты
 
 regress
+
 ```bash
   ./gradlew clean regress_emulator_android_wiki_task
 ```
+
 smoke
+
 ```bash
   ./gradlew clean smoke_emulator_android_wiki_task
 ```
+
 all
+
 ```bash
   ./gradlew clean all_emulator_android_wiki_task
 ```
 
-
 ---
 
-
 ## Запуск автотестов с локальной машины на BrowserStack
+
 ### Предварительно требуется
 
 1. Зарегистрироваться на BrowserStack
@@ -117,19 +125,25 @@ all
 ```powershell 
 curl.exe -u "${BrowserStackUser}:${BrowserStackKey}" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@${absolute path to app mobile-demo-tests\src\test\resources\apps\wiki.apk}" -F "custom_id=WikiApp" -k
 ```
+
 заменить вернувшийся в ответе bs в файле [browserstack.properties](src/test/resources/android/browserstack.properties)
 
-### Запустить одну из тасок 
+### Запустить одну из тасок
 
 regress
+
 ```bash
 ./gradlew clean -Dbrowserstack.user=${BrowserStackUser} -Dbrowserstack.key=${BrowserStackKey} regress_browserStack_android_wiki_task
 ```
+
 smoke
+
 ```bash
 ./gradlew clean -Dbrowserstack.user=${BrowserStackUser} -Dbrowserstack.key=${BrowserStackKey} smoke_browserStack_android_wiki_task
 ```
+
 all
+
 ```bash
 ./gradlew clean -Dbrowserstack.user=${BrowserStackUser} -Dbrowserstack.key=${BrowserStackKey} all_browserStack_android_wiki_task
 ```
@@ -144,11 +158,9 @@ ___
 
 <a id="сборка-jenkins"></a>
 
-## <img width="40" style="vertical-align:middle" src="images/jenkins.svg"> </a> Сборка в <a target="_blank" href="https://jenkins.autotests.cloud/job/C36-andreyalbaev-mobile-21/"> Jenkins </a>
+## <img width="40" style="vertical-align:middle" src="images/jenkins.svg"> <a target="_blank" href="https://jenkins.autotests.cloud/job/C36-andreyalbaev-mobile-21/"> Сборка </a> в Jenkins
 
-Jenkins job-а для запуска автотестов этого проекта
-располагается <a target="_blank" href="https://jenkins.autotests.cloud/job/C36-andreyalbaev-ui-21"> здесь</a>. Для
-запуска сборки необходимо нажать на <code>Build with parameters</code>, выбрать необходимые параметры и нажать
+Для запуска сборки необходимо нажать на <code>Build with parameters</code>, выбрать необходимые параметры и нажать
 кнопку <code>Build</code>.
 
 ### Параметры сборки в Jenkins:
@@ -175,7 +187,7 @@ TMS <code>Allure TestOps</code>.
 
 ## <img width="35" style="vertical-align:middle" src="images/allure.svg"> </a>  Allure
 
-### Пример отчёта
+### <a target="_blank" href="https://jenkins.autotests.cloud/job/C36-andreyalbaev-mobile-21/33/allure/"> Пример отчёта </a>
 
 <img src="images/allureReport.png" width="1500">
 
