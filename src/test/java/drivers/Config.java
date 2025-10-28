@@ -1,9 +1,6 @@
 package drivers;
 
-@org.aeonbits.owner.Config.Sources({
-        "system:properties",
-        "classpath:${os}/${env}.properties"
-})
+@org.aeonbits.owner.Config.Sources({"classpath:${os}/${env}.properties"})
 public interface Config extends org.aeonbits.owner.Config {
 
     @DefaultValue("android")
